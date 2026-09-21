@@ -13,14 +13,14 @@
 
 ## 本地运行
 
-1. 设置环境变量 `DB_PASSWORD`，或按需修改 `src/main/resources/application.properties` 中的 MySQL 用户名和密码。
+1. 修改 `src/main/resources/application.properties` 中的 MySQL 用户名和密码。
 2. 初始化数据库：
 
 ```powershell
-cmd /c "mysql -uroot -p --default-character-set=utf8mb4 < build-data\sekai.sql"
-cmd /c "mysql -uroot -p --default-character-set=utf8mb4 < build-data\user3-anime-seed.sql"
-cmd /c "mysql -uroot -p --default-character-set=utf8mb4 < build-data\user3-anime-seed-2.sql"
-cmd /c "mysql -uroot -p --default-character-set=utf8mb4 < build-data\sekai-anime-watch-date.sql"
+cmd /c "mysql -uroot -p123456 --default-character-set=utf8mb4 < build-data\sekai.sql"
+cmd /c "mysql -uroot -p123456 --default-character-set=utf8mb4 < build-data\user3-anime-seed.sql"
+cmd /c "mysql -uroot -p123456 --default-character-set=utf8mb4 < build-data\user3-anime-seed-2.sql"
+cmd /c "mysql -uroot -p123456 --default-character-set=utf8mb4 < build-data\sekai-anime-watch-date.sql"
 ```
 
 3. 启动项目：
