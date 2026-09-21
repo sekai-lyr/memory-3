@@ -3356,3 +3356,162 @@ textarea {
         flex-direction: column;
     }
 }
+
+/* Shared motion layer: subtle ambient movement plus feedback that makes the
+   existing glass surfaces feel tactile without changing the visual system. */
+.app-shell {
+    position: relative;
+    background-size: 140% 140%, 140% 140%, 100% 100%;
+    animation: ambient-shift 18s ease-in-out infinite alternate;
+}
+
+.motion-pending {
+    opacity: 1;
+    transform: translate3d(0, 18px, 0);
+}
+
+.motion-card,
+.module-card,
+.memory-card,
+.mini-card,
+.insight-card,
+.stat-card,
+.recommendation-card,
+.action-item,
+.timeline-card,
+.report-panel,
+.share-mini-card,
+.feature-item,
+.health-issue,
+.duplicate-group,
+.watch-plan-day {
+    transition:
+        transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 360ms ease,
+        border-color 360ms ease;
+}
+
+.motion-card:hover,
+.module-card:hover,
+.memory-card:hover,
+.mini-card:hover,
+.insight-card:hover,
+.stat-card:hover,
+.recommendation-card:hover,
+.action-item:hover,
+.timeline-card:hover,
+.report-panel:hover,
+.share-mini-card:hover,
+.feature-item:hover,
+.health-issue:hover,
+.duplicate-group:hover,
+.watch-plan-day:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 24px 56px rgba(83, 45, 112, 0.22);
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn,
+.nav a,
+.tag-link,
+.quote-video-link,
+.section-heading a,
+.pagination a,
+.brand-mark h1 {
+    transition:
+        transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 240ms ease,
+        color 240ms ease,
+        filter 240ms ease;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover,
+.danger-btn:hover,
+.nav a:hover,
+.tag-link:hover,
+.quote-video-link:hover,
+.section-heading a:hover,
+.pagination a:hover {
+    transform: translateY(-2px);
+}
+
+.primary-btn:active,
+.secondary-btn:active,
+.danger-btn:active,
+.nav a:active,
+.tag-link:active,
+.quote-video-link:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+.cover img,
+.avatar-cover img,
+.character-image-frame img,
+.detail-cover img {
+    transition: transform 560ms cubic-bezier(0.22, 1, 0.36, 1), filter 560ms ease;
+}
+
+.memory-card:hover .cover img,
+.memory-card:hover .avatar-cover img,
+.memory-card:hover .character-image-frame img,
+.detail-hero:hover .detail-cover img {
+    transform: scale(1.035);
+    filter: saturate(1.06);
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+    outline: 3px solid rgba(155, 62, 232, 0.42);
+    outline-offset: 3px;
+}
+
+@keyframes ambient-shift {
+    from {
+        background-position: 0% 0%, 100% 0%, 0 0;
+    }
+
+    to {
+        background-position: 7% 5%, 93% 8%, 0 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .motion-pending {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .motion-card:hover,
+    .module-card:hover,
+    .memory-card:hover,
+    .mini-card:hover,
+    .insight-card:hover,
+    .stat-card:hover,
+    .recommendation-card:hover,
+    .action-item:hover,
+    .timeline-card:hover,
+    .report-panel:hover,
+    .share-mini-card:hover,
+    .feature-item:hover,
+    .health-issue:hover,
+    .duplicate-group:hover,
+    .watch-plan-day:hover,
+    .primary-btn:hover,
+    .secondary-btn:hover,
+    .danger-btn:hover,
+    .nav a:hover,
+    .tag-link:hover,
+    .quote-video-link:hover {
+        transform: none;
+    }
+}

@@ -113,9 +113,6 @@ public class AnimeServiceImpl implements AnimeService {
                 && anime.getCurrentEpisode() > anime.getTotalEpisodes()) {
             anime.setCurrentEpisode(anime.getTotalEpisodes());
         }
-        if (anime.getReleaseDate() != null && anime.getWatchDate() == null) {
-            anime.setWatchDate(anime.getReleaseDate());
-        }
     }
 
     private boolean isBlank(String value) {

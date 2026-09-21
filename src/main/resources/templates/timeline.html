@@ -32,9 +32,9 @@
 
     <main class="main-wrap">
         <section class="page-title glass-panel">
-            <p class="eyebrow">MEMORY TIMELINE</p>
-            <h2>回忆时间线</h2>
-            <p>番剧、角色和台词会按记录时间汇在一起，往下翻的时候，就像翻一页自己的追番年表。</p>
+            <p class="eyebrow">ANIME TIMELINE</p>
+            <h2>番剧时间线</h2>
+            <p>按番剧的上映/开播时间排开，往下翻的时候，就像翻一页自己的追番年表。</p>
         </section>
 
         <section class="insight-strip timeline-summary">
@@ -42,19 +42,11 @@
                 <span>番剧</span>
                 <strong th:text="${stats.animeCount}">0</strong>
             </div>
-            <div class="insight-card">
-                <span>角色</span>
-                <strong th:text="${stats.characterCount}">0</strong>
-            </div>
-            <div class="insight-card">
-                <span>台词</span>
-                <strong th:text="${stats.quoteCount}">0</strong>
-            </div>
         </section>
 
         <section class="timeline-panel">
             <div class="empty-state glass-panel" th:if="${#lists.isEmpty(timelineItems)}">
-                还没有任何回忆记录，先添加一部番剧、一位角色，或一句台词吧。
+                还没有番剧记录，先添加一部番剧吧。
             </div>
 
             <article class="timeline-item" th:each="item : ${timelineItems}" th:classappend="${' timeline-' + item.type}">

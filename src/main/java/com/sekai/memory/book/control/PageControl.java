@@ -199,7 +199,7 @@ public class PageControl {
         List<CharacterFavorite> characterList = characterFavoriteService.listByUserId(user.getId());
         List<Quote> quoteList = quoteService.listByUserId(user.getId());
         model.addAttribute("loginUser", user);
-        model.addAttribute("timelineItems", buildAnimeReleaseTimeline(animeList));
+        model.addAttribute("timelineItems", buildTimeline(animeList));
         model.addAttribute("stats", buildStats(animeList, characterList, quoteList));
         return "timeline";
     }
@@ -1707,19 +1707,15 @@ public class PageControl {
         return report;
     }
 
-    private List<TimelineItem> buildTimeline(List<Anime> animeList,
-                                             List<CharacterFavorite> characterList,
-                                             List<Quote> quoteList) {
-        Map<Long, Anime> animeById = new HashMap<>();
-        animeList.forEach(anime -> animeById.put(anime.getId(), anime));
-
+    private List<TimelineItem> buildTimeline(List<Anime> animeList) {
+        // 时间线是"番剧时间线"：每条记录展示番剧的封面图、时间和名字，
+        // 按番剧自身的上映/开播日期排列。
         List<TimelineItem> items = new ArrayList<>();
         animeList.forEach(anime -> {
             TimelineItem item = new TimelineItem();
             item.setType("anime");
             item.setTitle(anime.getTitle());
             item.setSubtitle(compactJoin(
-                    anime.getReleaseDate() == null ? null : "上映/开播 " + anime.getReleaseDate(),
                     anime.getStatus(),
                     anime.getType(),
                     anime.getScore() == null ? null : anime.getScore() + " 分"));
@@ -1728,32 +1724,6 @@ public class PageControl {
             item.setHref("/anime/" + anime.getId());
             item.setImageUrl(anime.getCoverUrl());
             item.setOccurredAt(resolveAnimeTimelineTime(anime));
-            items.add(item);
-        });
-
-        characterList.forEach(character -> {
-            TimelineItem item = new TimelineItem();
-            item.setType("character");
-            item.setTitle(character.getCharacterName());
-            item.setSubtitle(compactJoin(findAnimeTitle(animeById, character.getAnimeId()),
-                    character.getFavoriteLevel() == null ? null : character.getFavoriteLevel() + " 星"));
-            item.setBody(character.getReason());
-            item.setBadge("角色");
-            item.setHref(character.getAnimeId() == null ? "/characters" : "/anime/" + character.getAnimeId());
-            item.setImageUrl(character.getImageUrl());
-            item.setOccurredAt(character.getCreateTime());
-            items.add(item);
-        });
-
-        quoteList.forEach(quote -> {
-            TimelineItem item = new TimelineItem();
-            item.setType("quote");
-            item.setTitle(quote.getContent());
-            item.setSubtitle(compactJoin(findAnimeTitle(animeById, quote.getAnimeId()), quote.getCharacterName(), quote.getTag()));
-            item.setBody(quote.getFeeling());
-            item.setBadge("台词");
-            item.setHref(quote.getAnimeId() == null ? "/quotes" : "/anime/" + quote.getAnimeId());
-            item.setOccurredAt(quote.getCreateTime());
             items.add(item);
         });
 
@@ -1763,38 +1733,18 @@ public class PageControl {
                 .toList();
     }
 
-    private List<TimelineItem> buildAnimeReleaseTimeline(List<Anime> animeList) {
-        List<TimelineItem> items = new ArrayList<>();
-        animeList.forEach(anime -> {
-            TimelineItem item = new TimelineItem();
-            item.setType("anime");
-            item.setTitle(anime.getTitle());
-            item.setSubtitle(compactJoin(
-                    anime.getReleaseDate() == null ? null : "上映/开播 " + anime.getReleaseDate(),
-                    anime.getStatus(),
-                    anime.getType(),
-                    anime.getScore() == null ? null : anime.getScore() + " 分"));
-            item.setBody(anime.getMemoryText());
-            item.setBadge("番剧");
-            item.setHref("/anime/" + anime.getId());
-            item.setImageUrl(anime.getCoverUrl());
-            item.setOccurredAt(resolveAnimeTimelineTime(anime));
-            items.add(item);
-        });
-        return items.stream()
-                .sorted(Comparator.comparing(TimelineItem::getOccurredAt,
-                        Comparator.nullsLast(Comparator.naturalOrder())))
-                .toList();
-    }
-
     private LocalDateTime resolveAnimeTimelineTime(Anime anime) {
+        // 时间线是"番剧时间线"：按番剧自身的上映/开播日期排列。
         if (anime.getReleaseDate() != null) {
             return anime.getReleaseDate().atStartOfDay();
         }
         if (anime.getWatchDate() != null) {
             return anime.getWatchDate().atStartOfDay();
         }
-        return anime.getCreateTime();
+        if (anime.getCreateTime() != null) {
+            return anime.getCreateTime();
+        }
+        return null;
     }
 
     private List<Integer> findAvailableYears(List<Anime> animeList,
